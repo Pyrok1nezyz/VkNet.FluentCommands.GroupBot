@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VkNet.FluentCommands.GroupBot.Abstractions;
 using VkNet.FluentCommands.GroupBot.Storage;
-using VkNet.Model.Attachments;
+using VkNet.Model;
 
 namespace VkNet.FluentCommands.GroupBot.Handlers
 {

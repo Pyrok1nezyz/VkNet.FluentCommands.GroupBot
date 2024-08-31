@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using VkNet.Abstractions;
 using VkNet.Model;
-using VkNet.Model.GroupUpdate;
 
 namespace VkNet.FluentCommands.GroupBot.Abstractions
 {

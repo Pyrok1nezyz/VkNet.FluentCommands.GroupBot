@@ -7,15 +7,12 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using VkNet.Abstractions;
-using VkNet.Enums.SafetyEnums;
+using VkNet.Enums.StringEnums;
 using VkNet.Exception;
 using VkNet.FluentCommands.GroupBot.Abstractions;
 using VkNet.FluentCommands.GroupBot.Handlers;
 using VkNet.FluentCommands.GroupBot.Storage;
 using VkNet.Model;
-using VkNet.Model.Attachments;
-using VkNet.Model.GroupUpdate;
-using VkNet.Model.RequestParams;
 
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -906,9 +903,9 @@ namespace VkNet.FluentCommands.GroupBot
                     {
                         try
                         {
-                            if (update?.Type != GroupUpdateType.MessageNew) continue;
-                            if (update?.MessageNew == null) continue;
-                            var messageNew = update.MessageNew;
+                            if (update?.Type.Value != GroupUpdateType.MessageNew) continue;
+                            if (update?.Instance == null) continue;
+                            var messageNew = update.Instance as MessageNew;
                             var message = messageNew.Message;
                             if (!message.PeerId.HasValue) throw new System.Exception("No PeerId");
                             if (!message.FromId.HasValue) throw new System.Exception("No FromId");
@@ -979,9 +976,8 @@ namespace VkNet.FluentCommands.GroupBot
                         }
                         catch (System.Exception e)
                         {
-                            var messageToProcess = new MessageToProcess(_botClient, update.MessageNew);
+                            var messageToProcess = new MessageToProcess(_botClient, (MessageNew)update.Instance);
                             await _botExceptionEvent.TriggerHandler(messageToProcess, e, cancellationToken).ConfigureAwait(false);
-                            continue;
                         }
                     }
                     
@@ -1078,7 +1074,7 @@ namespace VkNet.FluentCommands.GroupBot
         private async Task<BotsLongPollHistoryResponse> GetBotsLongPollHistoryAsync(
             string key,
             string server,
-            string ts,
+            ulong ts,
             CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();

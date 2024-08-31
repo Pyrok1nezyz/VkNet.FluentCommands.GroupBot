@@ -1,5 +1,5 @@
 ﻿using VkNet.Abstractions;
-using VkNet.Model.GroupUpdate;
+using VkNet.Model;
 
 namespace VkNet.FluentCommands.GroupBot.Abstractions
 {

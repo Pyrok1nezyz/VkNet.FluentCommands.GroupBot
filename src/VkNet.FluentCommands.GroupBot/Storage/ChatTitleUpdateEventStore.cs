@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VkNet.Abstractions;
 using VkNet.FluentCommands.GroupBot.Abstractions;
-using VkNet.Model.GroupUpdate;
+using VkNet.Model;
 
 namespace VkNet.FluentCommands.GroupBot.Storage
 {
