@@ -905,73 +905,75 @@ namespace VkNet.FluentCommands.GroupBot
                         {
                             if (update?.Type.Value != GroupUpdateType.MessageNew) continue;
                             if (update?.Instance == null) continue;
-                            var messageNew = update.Instance as MessageNew;
-                            var message = messageNew.Message;
-                            if (!message.PeerId.HasValue) throw new System.Exception("No PeerId");
-                            if (!message.FromId.HasValue) throw new System.Exception("No FromId");
-
-                            var forwardedMessages = message.ForwardedMessages?.ToArray() ?? new Message[] { };
-                            var attachments = message.Attachments?.ToArray() ?? new Attachment[] { };
-                            var replyMessage = message.ReplyMessage;
-                            var actionObject = message.Action;
-                            var geo = message.Geo;
-                            var type = DetectMessageType(forwardedMessages, attachments, actionObject, geo, replyMessage);
-                            var messageToProcess = new MessageToProcess(_botClient, messageNew);
-                            switch (type)
+                            if (update.Instance is MessageNew messageNew)
                             {
-                                case VkMessageType.Message:
-                                case VkMessageType.Reply:
-                                case VkMessageType.Sticker:
-                                case VkMessageType.Forward:
-                                    await CreateCommandHandler(type).Handle(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.Photo:
-                                    await _photoEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.Voice:
-                                    await _voiceEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.Video:
-                                    await _videoEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.Audio:
-                                    await _audioEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.Document:
-                                    await _documentEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.Poll:
-                                    await _pollEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.Geo:
-                                    await _geoEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.ChatInviteUser:
-                                    await _chatInviteUserEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.ChatKickUser:
-                                    await _chatKickUserEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.ChatPhotoRemove:
-                                    await _chatPhotoRemoveEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.ChatPhotoUpdate:
-                                    await _chatPhotoUpdateEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.ChatPinMessage:
-                                    await _chatPinMessageEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.ChatTitleUpdate:
-                                    await _chatTitleUpdateEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.ChatUnpinMessage:
-                                    await _chatUnpinMessageEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                case VkMessageType.ChatInviteUserByLink:
-                                    await _chatInviteUserByLinkEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
-                                    continue;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
+                                var message = messageNew.Message;
+                                if (!message.PeerId.HasValue) throw new System.Exception("No PeerId");
+                                if (!message.FromId.HasValue) throw new System.Exception("No FromId");
+
+                                var forwardedMessages = message.ForwardedMessages?.ToArray() ?? new Message[] { };
+                                var attachments = message.Attachments?.ToArray() ?? new Attachment[] { };
+                                var replyMessage = message.ReplyMessage;
+                                var actionObject = message.Action;
+                                var geo = message.Geo;
+                                var type = DetectMessageType(forwardedMessages, attachments, actionObject, geo, replyMessage);
+                                var messageToProcess = new MessageToProcess(_botClient, messageNew);
+                                switch (type)
+                                {
+                                    case VkMessageType.Message:
+                                    case VkMessageType.Reply:
+                                    case VkMessageType.Sticker:
+                                    case VkMessageType.Forward:
+                                        await CreateCommandHandler(type).Handle(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.Photo:
+                                        await _photoEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.Voice:
+                                        await _voiceEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.Video:
+                                        await _videoEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.Audio:
+                                        await _audioEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.Document:
+                                        await _documentEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.Poll:
+                                        await _pollEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.Geo:
+                                        await _geoEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.ChatInviteUser:
+                                        await _chatInviteUserEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.ChatKickUser:
+                                        await _chatKickUserEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.ChatPhotoRemove:
+                                        await _chatPhotoRemoveEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.ChatPhotoUpdate:
+                                        await _chatPhotoUpdateEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.ChatPinMessage:
+                                        await _chatPinMessageEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.ChatTitleUpdate:
+                                        await _chatTitleUpdateEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.ChatUnpinMessage:
+                                        await _chatUnpinMessageEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    case VkMessageType.ChatInviteUserByLink:
+                                        await _chatInviteUserByLinkEvent.TriggerHandler(messageToProcess, cancellationToken).ConfigureAwait(false);
+                                        continue;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
                             }
                         }
                         catch (System.Exception e)
